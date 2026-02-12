@@ -95,6 +95,11 @@
 			Console.WriteLine();
 
 			// String format
+			int carPrice = 20000;
+			int carInsurance = 500;
+			Console.WriteLine(String.Format("Prisen på bilen er \n-{0} og forsikring koster \n-{1}", carPrice, carInsurance));
+            Console.WriteLine();
+
 
 			// Tabel over Bil Info
 			Console.WriteLine("TABEL MED DIN INFORMATION");
