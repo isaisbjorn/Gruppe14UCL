@@ -45,11 +45,11 @@
 			{
 				brændstofType = benzinPris; //benzinPris == 13.49
 			}
-				else if (fuelType.ToLower() == "diesel") // ToLower sikrer, at koden virker, hvis der er stavefejl
+			else if (fuelType.ToLower() == "diesel") // ToLower sikrer, at koden virker, hvis der er stavefejl
 			{
 				brændstofType = dieselPris; // diselPris == 12.29
 			}
-				else
+			else
 			{
 				Console.WriteLine("Ukendt brændstoftype.");
 				return;
@@ -59,12 +59,28 @@
 
 			Console.WriteLine($"Den totale pris for {kmAfstand} km er: {totalPris:F0} kr");
 
+			Console.WriteLine();
+
+			// Opdateret Kilometerafstand
+			Console.WriteLine("Indtast din nuværende Kilometer Afstand: ");
+			double gammelKMAfstand = double.Parse(Console.ReadLine());
+
+			double nyKmAfstand = gammelKMAfstand + kmAfstand;
+			int afrundetAfstand = (int)Math.Round(nyKmAfstand);
+
+            Console.WriteLine(($"Din nye KM Afstand er: {afrundetAfstand}"));
+
+			// Opdateret info
+			Console.WriteLine();
+			Console.WriteLine(" === OPDATERET INFO === ");
+			Console.WriteLine($"Brændstof type: {fuelType}");
+			Console.WriteLine($"Km/l: {kmPerLiter}");
+			Console.WriteLine($"Originale Afstand: {gammelKMAfstand}");
+			Console.WriteLine($"Nye Afstand {afrundetAfstand}");
+			Console.WriteLine($"Brændstof Udgift: {totalPris:F2}");
 
 
-			Console.ReadLine();
 
-
-			
 
 		}
 	}
