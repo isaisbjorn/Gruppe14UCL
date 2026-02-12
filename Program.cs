@@ -12,10 +12,9 @@
             int kilometerstand = int.Parse(Console.ReadLine());
 
             Console.WriteLine("Brændstoftype " + brændstoftype);
-            Console.WriteLine("KM per liter " + kmperl);
+            Console.WriteLine("KM per liter " + kmperl + "Km");
             Console.WriteLine("Kilometerstand " + kilometerstand + "Km");
 
-            Console.ReadLine();
 
             Console.WriteLine("Hvor langt skal du køre? ");
             int afstand = int.Parse(Console.ReadLine());
@@ -32,13 +31,14 @@
             {
                 fuelType = benzinPris;
                 pris = benzinForbrug * benzinPris;
-                Console.WriteLine("Din tur vil koste: " + pris + "Kr");
+                Console.WriteLine("Din tur vil koste: {0} kr", pris);
             }
             else if (brændstoftype.ToLower() == "diesel")
             {
                 fuelType = dieselPris;
                 pris = benzinForbrug * dieselPris;
-                Console.WriteLine("Din tur vil koste: " + pris + "Kr");
+                Console.WriteLine(
+                    string.Format("Din tur vil koste: {0} kr", pris));
             }
             else
             {
@@ -54,7 +54,7 @@
 
             Console.WriteLine("====BILENS OPLYSNINGER====");
             Console.WriteLine("Brændstoftype: " + brændstoftype);
-            Console.WriteLine("Kilometer per liter: " + kmperl);
+            Console.WriteLine("Kilometer per liter: " + kmperl + "Km");
             Console.WriteLine("Oprindelig kilometerstand " + kilometerstand + "Km");
             Console.WriteLine("Ny kilometerstand " + Nykmantal + "Km");
             Console.WriteLine("Brændstofudgift " + pris + "kr");
@@ -62,12 +62,19 @@
             */
 
             // Overskrift
-            Console.WriteLine("Bilmærke ".PadRight(15) + "| " + " Model ".PadRight(12) + "|" + " Kilometertal ".PadLeft(12));
+            Console.WriteLine("Bilmærke ".PadRight(15) + "| " + " Model ".PadRight(12) + "|" + " Kilometertal ".PadLeft(14));
             Console.WriteLine("-------------------------------------------------");
             // Række 1
-            Console.WriteLine("Toyota ".PadRight(15,'.') + "|" + " Corolla ".PadRight(12) + "|" + " 156.000 ".PadLeft(12));
+            Console.WriteLine("Toyota ".PadRight(15) + "| " + " Corolla ".PadRight(12) + "|" + " 156.000 km ".PadLeft(14));
             // Række 2
-            Console.WriteLine("Ford ".PadRight(15) + "|" + " Fiesa ".PadRight(12) + "|" + " 112.000 km ".PadLeft(12));
+            Console.WriteLine("Ford ".PadRight(15) + "| " + " Fiesa ".PadRight(12) + "|" + " 112.000 km ".PadLeft(14));
+            // Række 3
+            Console.WriteLine("Skoda ".PadRight(15) + "| " + " Citigo ".PadRight(12) + "|" + " 225.000 km ".PadLeft(14));
+            // Række 4
+            Console.WriteLine("Tesla ".PadRight(15) + "| " + " Model Y ".PadRight(12) + "|" + " 100.000 km ".PadLeft(14));
+            // Række 5
+            Console.WriteLine("Audi ".PadRight(15) + "| " + " E-Tron ".PadRight(12) + "|" + " 75.000 km ".PadLeft(14));
+
             Console.ReadLine(); //For en afslutning på denne del.
         }
     }
