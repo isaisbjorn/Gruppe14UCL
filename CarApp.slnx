@@ -1,0 +1,7 @@
+<Solution>
+  <Folder Name="/docs/">
+    <File Path="../../../Downloads/git cheat sheet.pdf" />
+  </Folder>
+  <Project Path="CarApp/CarApp.csproj" />
+  <Project Path="test/test.csproj" />
+</Solution>
