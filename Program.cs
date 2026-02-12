@@ -4,7 +4,7 @@
     {
         static void Main(string[] args)
         {
-            /*Console.WriteLine("Hvilken brændstoftype kører bilen på? ");
+            Console.WriteLine("Hvilken brændstoftype kører bilen på? ");
             string brændstoftype = Console.ReadLine();
             Console.WriteLine("Hvor langt kører bilen per liter? ");
             double kmperl = double.Parse(Console.ReadLine());
@@ -59,7 +59,7 @@
             Console.WriteLine("Ny kilometerstand " + Nykmantal + "Km");
             Console.WriteLine("Brændstofudgift " + pris + "kr");
             Console.ReadLine();
-            */
+            
 
             // Overskrift
             Console.WriteLine("Bilmærke ".PadRight(15) + "| " + " Model ".PadRight(12) + "|" + " Kilometertal ".PadLeft(14));
