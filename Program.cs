@@ -96,7 +96,7 @@
 
 			// String format
 			int carPrice = 20000;
-			int carInsurance = 500;
+			int carInsurance = 5000;
 			Console.WriteLine(String.Format("Prisen på bilen er \n-{0} og forsikring koster \n-{1}", carPrice, carInsurance));
             Console.WriteLine();
 
