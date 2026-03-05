@@ -1,9 +1,48 @@
-﻿namespace Gruppe14
+﻿using System.Security.Cryptography.X509Certificates;
+
+namespace Gruppe14
 {
     internal class Program
     {
         static void Main(string[] args)
         {
+            Car myCar1 = new Car("Toyota", "Corolla", 2020, 'A', FuelType.Benzin, 22.5);
+            Car myCar2 = new Car("Nissan", "Qashqai", 2017, 'M', FuelType.Diesel, 17.8);
+
+            Console.WriteLine(myCar1.GetCarDetails());
+            Console.WriteLine(myCar2.GetCarDetails());
+
+            myCar1.ToggleEngine();
+            myCar1.Drive(120);
+            Console.WriteLine("\n Efter Kørsel:");
+            Console.WriteLine(myCar1.GetCarDetails());
+
+            double tripPrice = myCar1.CalculateTripPrice(120, 14.5);
+            Console.WriteLine($"Turen kostede: {tripPrice} kr.");
+
+            Console.ReadLine();
+
+            Car myCar3 = new Car("Toyota", "Corolla", 2020, 'A', FuelType.Benzin, 22.5);
+            myCar3.ToggleEngine();
+
+            List<Trip> trips = new List<Trip>
+            {
+                new Trip(myCar3, 50, DateTime.Now, DateTime.Now.AddHours(1)),
+                new Trip(myCar3, 30, DateTime.Now, DateTime.Now.AddMinutes(30)),
+                new Trip(myCar3, 100, DateTime.Now, DateTime.Now.AddHours(2))
+            };
+            
+            foreach (var trip in trips)
+            {
+                myCar3.Drive(trip);
+            }
+            Console.WriteLine("\n Alle ture for bilen");
+            foreach (var trip in myCar3.GetTrips())
+            {
+                Console.WriteLine(trip.GetTripDetails());
+            }
+            
+
             Console.WriteLine("Hvilket bilmærke? ");
             string bilmærke = Console.ReadLine();
             Console.WriteLine("Hvilken model? ");
