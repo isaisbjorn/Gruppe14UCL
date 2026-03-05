@@ -36,7 +36,7 @@ namespace Gruppe14
             // gemmer bilen i variablen
             _car = car;
 
-            // gemmer hvor langt turen er
+            // gemmer hvor lang turen er
             Distance = distance;
 
             // gemmer start og slut tidspunkt
@@ -72,7 +72,7 @@ namespace Gruppe14
         // kan bruges til at printe i konsollen
         public string GetTripDetails()
         {
-            return $"Date: {TripDate:dd/mm/yyyy}, Distance: {Distance} km, Duration: {CalculateDuration()}";
+            return $"Date: {TripDate}, Distance: {Distance} km, Duration: {CalculateDuration():hh\\:mm\\:ss}";
         }
     }
 }
