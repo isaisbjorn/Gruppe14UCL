@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography.X509Certificates;
+﻿using Microsoft.VisualBasic;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Gruppe14
 {
@@ -6,178 +7,81 @@ namespace Gruppe14
     {
         static void Main(string[] args)
         {
-            // Opretter to Car objekter med forskellige oplysninger
-            Car myCar1 = new Car("Toyota", "Corolla", 2020, 'A', FuelType.Benzin, 22.5);
-            Car myCar2 = new Car("Nissan", "Qashqai", 2017, 'M', FuelType.Diesel, 17.8);
+            // Opretter en benzinbil
+            Car car = new FuelCar("Toyota", "Corolla", 2020, "AB12345", FuelType.Benzin, 18);
 
-            // Udskriver information om bilerne
-            Console.WriteLine(myCar1.GetCarDetails());
-            Console.WriteLine(myCar2.GetCarDetails());
+            // Tænder motoren
+            car.ToggleEngine();
 
-            // Starter motoren på bilen
-            myCar1.ToggleEngine();
+            // Opretter nogle ture
+            Trip trip1 = new Trip(car, 50, DateTime.Now, DateTime.Now.AddHours(1));
+            Trip trip2 = new Trip(car, 30, DateTime.Now, DateTime.Now.AddMinutes(40));
 
-            // Kører en tur på 120 km
-            myCar1.Drive(120);
+            // Kører turene
+            car.Drive(trip1);
+            car.Drive(trip2);
 
-            // Udskriver nye oplysninger efter kørslen
-            Console.WriteLine("\n Efter Kørsel:");
-            Console.WriteLine(myCar1.GetCarDetails());
+            // Udskriver info om bilen
+            Console.WriteLine(car.GetCarDetails());
 
-            // Beregner hvad turen kostede i brændstof
-            double tripPrice = myCar1.CalculateTripPrice(120, 14.5);
-            Console.WriteLine($"Turen kostede: {tripPrice} kr.");
-
-            // Stopper programmet indtil brugeren trykker enter
-            Console.ReadLine();
-
-
-            // Opretter endnu en bil
-            Car myCar3 = new Car("Toyota", "Corolla", 2020, 'A', FuelType.Benzin, 22.5);
-
-            // Starter motoren
-            myCar3.ToggleEngine();
-
-
-            // Opretter en liste med ture
-            List<Trip> trips = new List<Trip>
-        {
-            new Trip(myCar3, 50, DateTime.Now, DateTime.Now.AddHours(1)),
-            new Trip(myCar3, 30, DateTime.Now, DateTime.Now.AddMinutes(30)),
-            new Trip(myCar3, 100, DateTime.Now, DateTime.Now.AddHours(2))
-        };
-
-            // Gennemgår listen og sender hver tur til bilen
-            foreach (var trip in trips)
-            {
-                myCar3.Drive(trip);
-            }
-
-            // Udskriver alle ture som bilen har kørt
-            Console.WriteLine("\n Alle ture for bilen");
-            foreach (var trip in myCar3.GetTrips())
+            // Udskriver alle ture
+            Console.WriteLine("\nAlle ture:");
+            foreach (var trip in car.GetTrips())
             {
                 Console.WriteLine(trip.GetTripDetails());
             }
 
+            Console.ReadLine();
 
-            // Spørger brugeren om oplysninger om en bil
-            Console.WriteLine("Hvilket bilmærke? ");
-            string bilmærke = Console.ReadLine();
+            // Opretter et hus
+            House h = new House("Strandvejen 42, 2900 Hellerup", 1965, 4200000, "1234-AB");
 
-            Console.WriteLine("Hvilken model? ");
-            string model = Console.ReadLine();
+            // Opretter biler
+            FuelCar fc = new FuelCar("Toyota", "Corolla", 2022, "AB12345", FuelType.Benzin, 18);
+            ElectricCar ec = new ElectricCar("Tesla", "Model 3", 2023, "CD67890", 6.5);
 
-            Console.WriteLine("Hvilken brændstoftype kører bilen på? ");
-            string brændstoftype = Console.ReadLine();
-
-            Console.WriteLine("Hvor langt kører bilen per liter? ");
-            double kmperl = double.Parse(Console.ReadLine());
-
-            Console.WriteLine("Hvad er kilometerstanden på bilen? ");
-            int kilometerstand = int.Parse(Console.ReadLine());
-
-            // Udskriver de værdier brugeren har indtastet
-            Console.WriteLine("Brændstoftype " + brændstoftype);
-            Console.WriteLine("KM per liter " + kmperl + "Km");
-            Console.WriteLine("Kilometerstand " + kilometerstand + "Km");
+            // Samler dem i en liste af ISellable (polymorfi)
+            List<ISellable> forSale = new List<ISellable> { fc, ec };
+            // Samler biler i en liste af IInsureable
+            List<IInsurable> insured = new List<IInsurable> { fc, ec };
+            // Tilføjer huse
+            forSale.Add(h);
+            insured.Add(h);
 
 
-            // Spørger hvor langt brugeren vil køre
-            Console.WriteLine("Hvor langt skal du køre? ");
-            int afstand = int.Parse(Console.ReadLine());
-
-            // Brændstofpriser
-            double benzinPris = 13.49;
-            double dieselPris = 12.29;
-
-            // Beregner hvor meget brændstof turen bruger
-            double benzinForbrug = afstand / kmperl;
-
-            double fuelType = 0;
-            double pris = 0;
-
-            // IF/ELSE der afgør hvilken pris der skal bruges
-            if (brændstoftype.ToLower() == "benzin")
+            // Udskriver salgsinformation for hver bil
+            foreach (ISellable s in forSale)
             {
-                fuelType = benzinPris;
-                pris = benzinForbrug * benzinPris;
-
-                Console.WriteLine("Din tur vil koste: {0} kr", pris);
-            }
-            else if (brændstoftype.ToLower() == "diesel")
-            {
-                fuelType = dieselPris;
-                pris = benzinForbrug * dieselPris;
-
-                Console.WriteLine(string.Format("Din tur vil koste: {0} kr", pris));
-            }
-            else
-            {
-                // Hvis brugeren skriver noget andet end benzin eller diesel
-                Console.WriteLine("Ukendt brændstoftype");
-                return;
+                Console.WriteLine(s.GetSalesSummary());
             }
 
-            Console.ReadLine();
+            // Beregner samlet salgspris
+            double total = 0;
 
-            // Beregner ny kilometerstand efter turen
-            int Nykmantal = kilometerstand + afstand;
+            foreach (ISellable s in forSale)
+            {
+                total += s.Price;
+            }
 
-            Console.ReadLine();
+            Console.WriteLine($"Samlet beholdningsværdi: {total:N0} kr");
 
-            // Udskriver en oversigt over bilens oplysninger
-            Console.WriteLine("====BILENS OPLYSNINGER====");
-            Console.WriteLine("Brændstoftype: " + brændstoftype);
-            Console.WriteLine("Kilometer per liter: " + kmperl + "Km");
-            Console.WriteLine("Oprindelig kilometerstand " + kilometerstand + "Km");
-            Console.WriteLine("Ny kilometerstand " + Nykmantal + "Km");
-            Console.WriteLine("Brændstofudgift " + pris + "kr");
+            // Udskriv forsikringsinfo
+            foreach (IInsurable i in insured)
+            {
+                Console.WriteLine($"Reg.nr: {i.RegistrationNumber} - Forsikringssats: {i.GetInsuranceRate():P}");
+            }
+            // Beregner gennemsnitlig forsikringssats
+            double sum = 0;
+            
+            foreach (IInsurable i in insured)
+            {
+                sum += i.GetInsuranceRate();
+            }
 
-            Console.ReadLine();
+            double average = sum / insured.Count;
 
-
-            // Laver en tabel med forskellige biler
-            Console.WriteLine("Bilmærke ".PadRight(15) + "| " + " Model ".PadRight(12) + "|" + " Kilometertal ".PadLeft(14));
-            Console.WriteLine("-------------------------------------------------");
-
-            Console.WriteLine("Toyota ".PadRight(15) + "| " + " Corolla ".PadRight(12) + "|" + " 156.000 km ".PadLeft(14));
-            Console.WriteLine("Ford ".PadRight(15) + "| " + " Fiesa ".PadRight(12) + "|" + " 112.000 km ".PadLeft(14));
-            Console.WriteLine("Skoda ".PadRight(15) + "| " + " Citigo ".PadRight(12) + "|" + " 225.000 km ".PadLeft(14));
-            Console.WriteLine("Tesla ".PadRight(15) + "| " + " Model Y ".PadRight(12) + "|" + " 100.000 km ".PadLeft(14));
-            Console.WriteLine("Audi ".PadRight(15) + "| " + " E-Tron ".PadRight(12) + "|" + " 75.000 km ".PadLeft(14));
-
-            // Udskriver også bilen som brugeren har indtastet
-            Console.WriteLine(bilmærke.PadRight(15) + "| " + " " + model.PadRight(11) + "|" +
-                kilometerstand.ToString("N0", new System.Globalization.CultureInfo("da-DK")).PadLeft(10) + " km");
-
-            Console.WriteLine("-------------------------------------------------");
-
-            Console.WriteLine("\nTryk enter for at fortsætte");
-            Console.ReadLine();
-
-
-            // Laver en tabel med alle oplysninger om bilen
-            Console.WriteLine("Info ".PadRight(15) + "| " + "Værdier ".PadRight(12) + "|" + "Måleenheder ".PadLeft(14));
-            Console.WriteLine("-----------------------------------------------------");
-
-            Console.WriteLine("Bilmærke ".PadRight(15) + "| " + bilmærke.PadRight(12) + "|" + " ".PadLeft(14));
-            Console.WriteLine("Model ".PadRight(15) + "| " + model.PadRight(12) + "|" + " ".PadLeft(14));
-            Console.WriteLine("Kilometerstand ".PadRight(15) + "| " +
-                kilometerstand.ToString("N0", new System.Globalization.CultureInfo("da-DK")).PadRight(12) + "|" + "km ".PadRight(14));
-
-            Console.WriteLine("Brændstoftype ".PadRight(15) + "| " + brændstoftype.PadRight(12) + "|" + " ".PadLeft(14));
-            Console.WriteLine("Kilometer pr/l ".PadRight(15) + "| " + kmperl.ToString().PadRight(12) + "|" + "km/l ".PadRight(14));
-
-            Console.WriteLine("Ny km stand ".PadRight(15) + "| " +
-                Nykmantal.ToString("N0", new System.Globalization.CultureInfo("da-DK")).PadRight(12) + "|" + "km ".PadRight(14));
-
-            Console.WriteLine("Pris for turen ".PadRight(15) + "| " + pris.ToString().PadRight(12) + "|" + "kr ".PadRight(14));
-
-            Console.WriteLine("-----------------------------------------------------");
-
-            // Stopper programmet før det lukker
-            Console.ReadLine();
+            Console.WriteLine($"Gennemsnitlig forsikringssats: {average:P}");
         }
+        
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace Gruppe14
@@ -9,10 +8,9 @@ namespace Gruppe14
     public class Trip
     {
         // gemmer hvilken bil turen er kørt i
-        // jeg bruger den senere til at finde bilens KmPerLiter
         private Car _car;
 
-        // hvor langt turen er kørt (i km)
+        // hvor lang turen er (i km)
         public double Distance { get; private set; }
 
         // datoen turen blev kørt
@@ -24,56 +22,46 @@ namespace Gruppe14
         // slut tidspunkt for turen
         public DateTime EndTime { get; private set; }
 
-        // giver adgang til bilen, men man kan ikke ændre den udefra
+        // giver adgang til bilen
         public Car Car
         {
             get { return _car; }
         }
 
-        // konstruktør - bruges når man opretter en ny tur
+        // konstruktør
         public Trip(Car car, double distance, DateTime startTime, DateTime endTime)
         {
-            // gemmer bilen i variablen
             _car = car;
-
-            // gemmer hvor lang turen er
             Distance = distance;
-
-            // gemmer start og slut tidspunkt
             StartTime = startTime;
             EndTime = endTime;
-
-            // tager datoen fra startTime
             TripDate = startTime.Date;
         }
 
         // beregner hvor lang tid turen har taget
         public TimeSpan CalculateDuration()
         {
-            // trækker start tidspunkt fra slut tidspunkt
             return EndTime - StartTime;
         }
 
         // beregner hvor meget brændstof der blev brugt
         public double CalculateFuelUsed()
         {
-            // distance delt med bilens km pr liter
-            return Distance / _car.KmPerLiter;
+            // simpel løsning: virker kun for FuelCar
+            FuelCar fuelCar = (FuelCar)_car;
+            return Distance / fuelCar.KmPerLiter;
         }
 
-        // beregner hvad turen kostede i brændstof
+        // beregner hvad turen kostede
         public double CalculateTripPrice(double literPrice)
         {
-            // bruger metoden ovenfor og ganger med literprisen
             return CalculateFuelUsed() * literPrice;
         }
 
         // laver en tekst med information om turen
-        // kan bruges til at printe i konsollen
         public string GetTripDetails()
         {
             return $"Date: {TripDate}, Distance: {Distance} km, Duration: {CalculateDuration():hh\\:mm\\:ss}";
         }
     }
 }
-

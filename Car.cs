@@ -1,137 +1,81 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Transactions;
 
 namespace Gruppe14
 {
-    public class Car
+    public abstract class Car
     {
-        // Attributter (private variabler der gemmer data om bilen)
-        private string brand;
-        private string model;
-        private int year;
-        private char gear;
-        private double odometer;
-        private bool isEngineOn;
-        private double kmPerLiter;
+        // Grundlæggende bilinfo
+        public string Brand { get; private set; }
+        public string Model { get; private set; }
+        public int Year { get; private set; }
+        public string LicensePlate { get; private set; }
 
-        // Liste der gemmer alle ture bilen har kørt
+        // Kilometerstand kan ændres i subklasser
+        public double Odometer { get; protected set; }
+
+        // Motorstatus
+        public bool IsEngineOn { get; private set; }
+
+        // Liste over ture
         private List<Trip> _trips = new List<Trip>();
 
-
-        // Konstruktør
-        // Bruges når man opretter en ny bil
-        public Car(string brand, string model, int year, char gear, FuelType fuelType, double kmPerLiter)
+        // Constructor
+        public Car(string brand, string model, int year, string licensePlate)
         {
-            // Gemmer værdierne i klassens variabler
-            this.brand = brand;
-            this.model = model;
-            this.year = year;
-            this.gear = gear;
-
-            FuelType = fuelType;
-            this.kmPerLiter = kmPerLiter;
-
-            // Startværdier når bilen oprettes
-            this.odometer = 0;
-            this.isEngineOn = false;
+            Brand = brand;
+            Model = model;
+            Year = year;
+            LicensePlate = licensePlate;
         }
 
+        // Abstrakt metode → skal implementeres i subklasser
+        public abstract void UpdateEnergyLevel(double km);
 
-        // Properties
-        // Giver adgang til værdierne uden at andre klasser kan ændre dem direkte
-        public string Brand => brand;
-        public string Model => model;
-        public int Year => year;
-
-        // Gear kan både læses og ændres
-        public char Gear
+        // Simpel metode til at tænde/slukke motor
+        public void ToggleEngine()
         {
-            get { return gear; }
-            set { gear = value; }
+            IsEngineOn = !IsEngineOn;
         }
 
-        // Odometer viser hvor langt bilen har kørt
-        public double Odometer => odometer;
+        // Kør en tur
+        public void Drive(Trip trip)
+        {
+            if (IsEngineOn)
+            {
+                Odometer += trip.Distance;
+                UpdateEnergyLevel(trip.Distance);
+                _trips.Add(trip);
+            }
+            else
+            {
+                Console.WriteLine("Fejl: Motoren er ikke tændt.");
+            }
+        }
 
-        // Hvor langt bilen kører per liter
-        public double KmPerLiter => kmPerLiter;
-
-        // Viser om motoren er tændt
-        public bool IsEngineOn => isEngineOn;
-
-        // Enum der viser hvilken brændstoftype bilen bruger
-        public FuelType FuelType { get; private set; }
-
-
-        // Returnerer listen med alle ture
+        // Hent alle ture
         public List<Trip> GetTrips()
         {
             return _trips;
         }
 
-
-        // Metode der tænder eller slukker motoren
-        public void ToggleEngine()
+        // Hent ture på en bestemt dato
+        public List<Trip> GetTripsByDate(DateTime date)
         {
-            // Skifter værdien fra true til false eller omvendt
-            isEngineOn = !isEngineOn;
+            List<Trip> result = new List<Trip>();
+
+            foreach (Trip trip in _trips)
+                if (trip.TripDate.Date == date.Date)
+                    result.Add(trip);
+
+            return result;
         }
 
-
-        // Metode til at køre bilen en distance
-        public void Drive(double distance)
-        {
-            // Bilen kan kun køre hvis motoren er tændt og distancen er positiv
-            if (isEngineOn && distance > 0)
-            {
-                // Lægger distance til kilometerstanden
-                odometer += distance;
-            }
-        }
-
-
-        // Beregner hvad en tur koster i brændstof
-        public double CalculateTripPrice(double distance, double literPrice)
-        {
-            // Hvis værdierne er ugyldige returneres 0
-            if (distance <= 0 || literPrice <= 0)
-                return 0;
-
-            // Beregner hvor meget brændstof der bruges
-            double fueldUsed = distance / kmPerLiter;
-
-            // Returnerer prisen for turen
-            return fueldUsed * literPrice;
-        }
-
-
-        // Returnerer en tekst med oplysninger om bilen
+        // Info om bilen
         public string GetCarDetails()
         {
-            return $"{brand} {model} ({year}) - {FuelType} - {odometer} km - Motor: {(isEngineOn ? "Tændt" : "Slukket")}";
-        }
-
-
-        // Metode der tilføjer en tur til bilen
-        public void Drive(Trip newTrip)
-        {
-            // Tjekker at turen tilhører denne bil
-            if (newTrip.Car == this)
-            {
-                // Opdaterer kilometerstanden
-                odometer += newTrip.Distance;
-
-                // Gemmer turen i listen
-                _trips.Add(newTrip);
-            }
-            else
-            {
-                // Hvis turen ikke tilhører bilen vises en fejl
-                Console.WriteLine("Fejl: Denne tur tilhører ikke denne bil.");
-            }
+            return $"{Brand} {Model} ({Year}) - {LicensePlate} - KM: {Odometer}";
         }
     }
 }
-
