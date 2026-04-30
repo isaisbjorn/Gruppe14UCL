@@ -1,5 +1,7 @@
 ﻿using Microsoft.VisualBasic;
 using System.Security.Cryptography.X509Certificates;
+using CarApp.Core.Models;
+using CarApp.Core.Repositories;
 
 namespace Gruppe14
 {
@@ -7,8 +9,18 @@ namespace Gruppe14
     {
         static void Main(string[] args)
         {
-            // Opretter en benzinbil
-            Car car = new FuelCar("Toyota", "Corolla", 2020, "AB12345", FuelType.Benzin, 18);
+            ICarRepository repo = new FileCarRepository("cars.txt");
+
+            repo.Add(new FuelCar("Toyota", "Corolla", 2022, "AB12345", 15));
+            repo.Add(new ElectricCar("Tesla", "Model 3", 2023, "CD67890", 6.5));
+
+            foreach (Car car in repo.GetAll())
+            {
+                Console.WriteLine($"{car.Brand} {car.Model} {car.LicensePlate}");
+            }
+
+           /* // Opretter en benzinbil
+            Car car = new FuelCar("Toyota", "Corolla", 2020, "AB12345", 18);
 
             // Tænder motoren
             car.ToggleEngine();
@@ -37,13 +49,13 @@ namespace Gruppe14
             House h = new House("Strandvejen 42, 2900 Hellerup", 1965, 4200000, "1234-AB");
 
             // Opretter biler
-            FuelCar fc = new FuelCar("Toyota", "Corolla", 2022, "AB12345", FuelType.Benzin, 18);
+            FuelCar fc = new FuelCar("Toyota", "Corolla", 2022, "AB12345", 18);
             ElectricCar ec = new ElectricCar("Tesla", "Model 3", 2023, "CD67890", 6.5);
 
             // Samler dem i en liste af ISellable (polymorfi)
-            List<ISellable> forSale = new List<ISellable> { fc, ec };
+            // List<ISellable> forSale = new List<ISellable> { fc, ec };
             // Samler biler i en liste af IInsureable
-            List<IInsurable> insured = new List<IInsurable> { fc, ec };
+            //List<IInsurable> insured = new List<IInsurable> { fc, ec };
             // Tilføjer huse
             forSale.Add(h);
             insured.Add(h);
@@ -81,6 +93,35 @@ namespace Gruppe14
             double average = sum / insured.Count;
 
             Console.WriteLine($"Gennemsnitlig forsikringssats: {average:P}");
+            
+
+            // Program.cs - test af InMemoryCarRepository
+            ICarRepository repo = new InMemoryCarRepository();
+            //ICarRepository repo = new FileCarRepository("cars.txt");
+            repo.Add(new FuelCar("Toyota", "Corolla", 2022, "AB12345", 50));
+
+            repo.Add(new ElectricCar("Tesla", "Model 3", 2023, "CD67890", 75));
+
+
+            // Hent alle og udskriv
+
+            foreach (Car c in repo.GetAll())
+
+                Console.WriteLine($"{c.Brand} {c.Model} — {c.LicensePlate}");
+
+
+            // Hent en specifik bil
+
+            Car found = repo.GetByLicensePlate("AB12345");
+
+            Console.WriteLine(found != null ? $"Fundet: {found.Brand}" : "Ikke fundet");
+
+
+            // Slet en bil og verificer
+
+            repo.Delete("AB12345");
+
+            Console.WriteLine($"Antal biler: {repo.GetAll().Count()}"); // 1 */
         }
         
     }

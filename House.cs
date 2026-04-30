@@ -35,7 +35,7 @@ namespace Gruppe14
         // Forsikringssats (ældre huse dyrere)
         public double GetInsuranceRate()
         {
-            return YearBuilt < 1980 ? 1.8 : 1.2;
+            return YearBuilt < 1980 ? 0.018 : 0.012;
         }
     }
 }
